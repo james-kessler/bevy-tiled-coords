@@ -6,13 +6,13 @@
 //! | Space | Meaning |
 //! |-------|---------|
 //! | **Tiled** | Layer cell indices and object `x` / `y` in the map file |
-//! | **Tile** | Logical grid cells as [`TilePos`] from [`bevy_ecs_tilemap`] |
+//! | **Tile** | Logical grid cells as [TilePos](https://docs.rs/bevy_ecs_tilemap/latest/bevy_ecs_tilemap/tiles/struct.TilePos.html) from [bevy_ecs_tilemap](https://docs.rs/bevy_ecs_tilemap) |
 //! | **World** | Bevy global positions for gameplay, picking, and sprites |
 //!
 //! ## Isometric maps in the base libraries
 //!
 //! [`bevy_ecs_tiled`](https://docs.rs/bevy_ecs_tiled) and [`bevy_ecs_tilemap`](https://docs.rs/bevy_ecs_tilemap)
-//! load and draw **diamond** isometric maps. [`TilePos::from_world_pos`] and
+//! load and draw **diamond** isometric maps. [TilePos::from_world_pos](https://docs.rs/bevy_ecs_tilemap/latest/bevy_ecs_tilemap/tiles/struct.TilePos.html#method.from_world_pos) and
 //! [`TiledMapAsset::tile_relative_position`](https://docs.rs/bevy_ecs_tiled/latest/bevy_ecs_tiled/tiled/map/asset/struct.TiledMapAsset.html#method.tile_relative_position)
 //! cover much of the tile ↔ world math.
 //!
@@ -22,9 +22,9 @@
 //!   another loader.
 //! - **Tiled objects** on diamond maps follow an object **grid** (pixels ÷ `tile_height`). Spawn
 //!   helpers that use raw object pixels alone can miss that grid.
-//! - **Layer indices** in the `.tmx` file use a different Y direction than [`TilePos`]; convert with
+//! - **Layer indices** in the `.tmx` file use a different Y direction than [TilePos](https://docs.rs/bevy_ecs_tilemap/latest/bevy_ecs_tilemap/tiles/struct.TilePos.html); convert with
 //!   [`tiled_layer_to_bevy_tile`].
-//! - **World picking** must go through each [`TiledTilemap`] [`GlobalTransform`], including layer
+//! - **World picking** must go through each [TiledTilemap](https://docs.rs/bevy_ecs_tiled/latest/bevy_ecs_tiled/prelude/struct.TiledTilemap.html) [GlobalTransform](https://docs.rs/bevy/latest/bevy/prelude/struct.GlobalTransform.html), including layer
 //!   offsets on parent entities.
 //! - **Mixed tile heights** and **layer offsets** interact: shorter tilesets sit higher on the cell,
 //!   so a uniform layer lift may need [`tilemap_height_offset_adjustment`].
@@ -40,7 +40,7 @@
 //!
 //! ## Y axis on tile indices
 //!
-//! Tiled layer `y` grows downward in the editor. Bevy [`TilePos`] `y` uses the tilemap convention.
+//! Tiled layer `y` grows downward in the editor. Bevy [TilePos](https://docs.rs/bevy_ecs_tilemap/latest/bevy_ecs_tilemap/tiles/struct.TilePos.html) `y` uses the tilemap convention.
 //! [`tiled_layer_to_bevy_tile`] applies the flip.
 //!
 //! ## World points on a tile
@@ -50,7 +50,7 @@
 //!
 //! ## Picking a tilemap
 //!
-//! Maps often have several [`TiledTilemap`] entities. Build [`TiledMapGeometry`] from the
+//! Maps often have several [TiledTilemap](https://docs.rs/bevy_ecs_tiled/latest/bevy_ecs_tiled/prelude/struct.TiledTilemap.html) entities. Build [`TiledMapGeometry`] from the
 //! tilemap you care about, then call [`TiledMapGeometry::world_to_tile`] or
 //! [`object_grid_anchor_world`].
 
