@@ -1,0 +1,37 @@
+[package]
+name = "bevy_tiled_coords"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+description = "Coordinate helpers for Tiled maps with Bevy and bevy_ecs_tiled (isometric object grid, tile indices, world space)."
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+authors = ["James Kessler"]
+keywords = ["bevy", "tiled", "isometric", "tilemap", "gamedev"]
+categories = ["game-development"]
+repository = "https://github.com/james-kessler/bevy-tiled-coords"
+documentation = "https://docs.rs/bevy_tiled_coords"
+homepage = "https://github.com/james-kessler/bevy-tiled-coords"
+
+[lib]
+name = "bevy_tiled_coords"
+path = "src/lib.rs"
+
+[dependencies]
+bevy = { version = "0.19.1", default-features = false }
+bevy_ecs_tiled = "0.13.4"
+
+[dev-dependencies]
+bevy = { version = "0.19.1", default-features = true, features = ["file_watcher"] }
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[[example]]
+name = "object_grid_cell"
+path = "examples/object_grid_cell.rs"
+
+[[example]]
+name = "geometry_roles"
+path = "examples/geometry_roles.rs"

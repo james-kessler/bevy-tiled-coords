@@ -1,0 +1,47 @@
+use bevy_ecs_tiled::prelude::*;
+use bevy_tiled_coords::{iso_object_coords_to_tile, tiled_layer_to_bevy_tile};
+use tiled::Loader;
+
+mod common;
+use common::first_object_in_map;
+
+const FIXTURE_DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures");
+
+#[test]
+fn tiled_layer_y_flip_into_bevy_tile() {
+    let map_size = TilemapSize { x: 10, y: 20 };
+    let tile = tiled_layer_to_bevy_tile(3, 5, &map_size).unwrap();
+    assert_eq!(tile.x, 3);
+    assert_eq!(tile.y, 14);
+}
+
+#[test]
+fn tiled_layer_rejects_out_of_bounds() {
+    let map_size = TilemapSize { x: 4, y: 4 };
+    assert!(tiled_layer_to_bevy_tile(-1, 0, &map_size).is_none());
+    assert!(tiled_layer_to_bevy_tile(0, 4, &map_size).is_none());
+}
+
+#[test]
+fn iso_object_grid_from_fixture() {
+    let map = Loader::new()
+        .load_str(include_str!("fixtures/iso_map.tmx"), &[FIXTURE_DIR])
+        .expect("load iso_map.tmx");
+    let object = first_object_in_map(&map);
+    assert_eq!(iso_object_coords_to_tile(&object, &map), (2, 2));
+}
+
+#[test]
+fn object_grid_indices_align_with_layer_flip() {
+    let map = Loader::new()
+        .load_str(include_str!("fixtures/iso_map.tmx"), &[FIXTURE_DIR])
+        .expect("load iso_map.tmx");
+    let object = first_object_in_map(&map);
+    let (tx, ty) = iso_object_coords_to_tile(&object, &map);
+    let map_size = TilemapSize {
+        x: map.width,
+        y: map.height,
+    };
+    let tile = tiled_layer_to_bevy_tile(tx, ty, &map_size).unwrap();
+    assert_eq!(tile, TilePos::new(2, 5));
+}
