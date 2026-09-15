@@ -1,23 +1,19 @@
 //! Print the tile cell for a TMX object on an isometric map.
 //!
-//! Run from the crate root:
-//!
 //! ```text
 //! cargo run --example object_grid_cell
 //! ```
 
+use ::tiled::{LayerType, Loader};
 use bevy_ecs_tiled::prelude::*;
 use bevy_tiled_coords::{iso_object_coords_to_tile, tiled_layer_to_bevy_tile};
-use tiled::{LayerType, Loader};
 
 fn main() {
-    let fixture_dir = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures");
-    let map = Loader::new()
-        .load_str(
-            include_str!("../tests/fixtures/iso_map.tmx"),
-            &[fixture_dir],
-        )
-        .expect("load iso_map.tmx");
+    let path = std::path::PathBuf::from(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/tests/fixtures/iso_map.tmx"
+    ));
+    let map = Loader::new().load_tmx_map(&path).expect("load iso_map.tmx");
 
     let object = find_object(&map);
     let (tx, ty) = iso_object_coords_to_tile(&object, &map);

@@ -12,13 +12,29 @@ The crate links three spaces:
 - **Tile** — logical cells as [`TilePos`](https://docs.rs/bevy_ecs_tilemap/latest/bevy_ecs_tilemap/tiles/struct.TilePos.html)
 - **World** — Bevy global positions for gameplay, pathfinding, and picking
 
+## Isometric maps in the base libraries
+
+[`bevy_ecs_tiled`](https://docs.rs/bevy_ecs_tiled) and [`bevy_ecs_tilemap`](https://docs.rs/bevy_ecs_tilemap) already render diamond isometric maps and expose core math (`TilePos::from_world_pos`, `TiledMapAsset::tile_relative_position`, and related APIs). In practice, isometric Tiled projects still need extra glue:
+
+| Topic | What the stack gives you | Where projects often need help |
+|-------|--------------------------|--------------------------------|
+| Map orientation | Diamond isometric (`IsoCoordSystem::Diamond`) | Staggered isometric maps are unsupported in `bevy_ecs_tiled` 0.13 |
+| Tiled objects | `object_relative_position` uses object pixel coordinates in map space | On diamond iso, Tiled’s **object grid** uses `object.x / tile_height` and `object.y / tile_height` for cell placement |
+| Tile indices | `TilePos` on the logical grid | Tiled layer `y` and Bevy `TilePos.y` use opposite directions; you must flip when converting indices |
+| World position | Tile centers via `tile_relative_position` | Picking uses the tilemap’s [`GlobalTransform`]; layer and group offsets sit on parent entities |
+| Tile art height | Tiles draw from `center - tile_size / 2` | Tall sprites on a short map grid need a separate **drawable** center for cursors and highlights |
+| Layer offsets | Uniform translation on layer entities | Mixed tileset heights (16px terrain vs 32px floor) need a small Y correction per tilemap |
+| Depth | `y_sort` on tilemap chunks | Freestanding sprites need the same Y-based Z formula as the renderer |
+
+`bevy_tiled_coords` documents these coordinate spaces in one place and ships helpers for the rows above. It builds on the base libraries; it does not replace them.
+
 ## Install
 
 ```toml
 [dependencies]
 bevy = "0.19.1"
 bevy_ecs_tiled = "0.13.4"
-bevy_tiled_coords = "0.1.0"
+bevy_tiled_coords = "0.1.1"
 ```
 
 ## Quick start

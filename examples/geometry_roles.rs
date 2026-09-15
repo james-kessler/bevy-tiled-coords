@@ -1,19 +1,35 @@
 //! Round-trip a tile position through world space with two roles.
 //!
 //! ```text
+//! python3 tests/fixtures/generate_tile.py
 //! cargo run --example geometry_roles
 //! ```
 
+use std::time::Duration;
+
+use bevy::app::ScheduleRunnerPlugin;
 use bevy::prelude::*;
+use bevy::window::{ExitCondition, WindowPlugin};
+use bevy::winit::WinitPlugin;
 use bevy_ecs_tiled::prelude::*;
 use bevy_tiled_coords::{tile_drawable_y_offset, TileWorldRole, TiledMapGeometry};
 
 fn main() {
     let mut app = App::new();
-    app.add_plugins(DefaultPlugins.set(AssetPlugin {
-        file_path: concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures").into(),
-        ..default()
-    }))
+    app.add_plugins(
+        DefaultPlugins
+            .set(WindowPlugin {
+                primary_window: None,
+                exit_condition: ExitCondition::DontExit,
+                ..default()
+            })
+            .disable::<WinitPlugin>()
+            .set(AssetPlugin {
+                file_path: concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures").into(),
+                ..default()
+            }),
+    )
+    .add_plugins(ScheduleRunnerPlugin::run_loop(Duration::from_millis(16)))
     .add_plugins(TiledPlugin::default());
 
     let handle: Handle<TiledMapAsset> = app.world().resource::<AssetServer>().load("iso_map.tmx");

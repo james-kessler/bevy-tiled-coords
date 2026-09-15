@@ -1,4 +1,3 @@
-use bevy_ecs_tiled::prelude::*;
 use bevy_tiled_coords::tile_drawable_y_offset;
 
 #[test]

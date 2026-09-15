@@ -2,15 +2,14 @@ use bevy::prelude::*;
 use bevy_tiled_coords::{
     accumulated_tiled_layer_offset, mixed_height_layer_y_adjustment, y_sort_z_offset,
 };
-use tiled::Loader;
 
-const FIXTURE_DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures");
+mod support;
+
+use support::load_iso_fixture_map;
 
 #[test]
 fn accumulated_offset_includes_group() {
-    let map = Loader::new()
-        .load_str(include_str!("fixtures/iso_map.tmx"), &[FIXTURE_DIR])
-        .expect("load iso_map.tmx");
+    let map = load_iso_fixture_map();
     let object_layer_id = 2u32;
     let offset = accumulated_tiled_layer_offset(&map, object_layer_id).unwrap();
     assert_eq!(offset, Vec2::new(0.0, 16.0));

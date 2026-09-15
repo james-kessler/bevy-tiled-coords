@@ -1,6 +1,6 @@
 [package]
 name = "bevy_tiled_coords"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 rust-version = "1.85"
 description = "Coordinate helpers for Tiled maps with Bevy and bevy_ecs_tiled (isometric object grid, tile indices, world space)."
@@ -18,8 +18,14 @@ name = "bevy_tiled_coords"
 path = "src/lib.rs"
 
 [dependencies]
-bevy = { version = "0.19.1", default-features = false }
+bevy = { version = "0.19.1", default-features = false, features = [
+    "bevy_asset",
+    "bevy_image",
+    "bevy_log",
+    "multi_threaded",
+] }
 bevy_ecs_tiled = "0.13.4"
+tiled = { version = "0.16", default-features = false, features = ["world"] }
 
 [dev-dependencies]
 bevy = { version = "0.19.1", default-features = true, features = ["file_watcher"] }

@@ -1,6 +1,6 @@
-//! Depth sorting with [`TilemapRenderSettings::y_sort`].
+//! Depth sorting with [TilemapRenderSettings::y_sort](https://docs.rs/bevy_ecs_tilemap/latest/bevy_ecs_tilemap/map/struct.TilemapRenderSettings.html#structfield.y_sort).
 
-/// Z offset used by [`bevy_ecs_tilemap`] when `y_sort` is enabled on chunks.
+/// Z offset used by [bevy_ecs_tilemap](https://docs.rs/bevy_ecs_tilemap) when `y_sort` is enabled on chunks.
 ///
 /// Add this to a sprite's layer `z` so it sorts with tiles at the same world `y`.
 pub fn y_sort_z_offset(world_y: f32, map_size_y: u32, tile_height: f32) -> f32 {

@@ -1,11 +1,11 @@
 use bevy_ecs_tiled::prelude::*;
 use bevy_tiled_coords::{iso_object_coords_to_tile, tiled_layer_to_bevy_tile};
-use tiled::Loader;
 
 mod common;
-use common::first_object_in_map;
+mod support;
 
-const FIXTURE_DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures");
+use common::first_object_in_map;
+use support::load_iso_fixture_map;
 
 #[test]
 fn tiled_layer_y_flip_into_bevy_tile() {
@@ -24,18 +24,14 @@ fn tiled_layer_rejects_out_of_bounds() {
 
 #[test]
 fn iso_object_grid_from_fixture() {
-    let map = Loader::new()
-        .load_str(include_str!("fixtures/iso_map.tmx"), &[FIXTURE_DIR])
-        .expect("load iso_map.tmx");
+    let map = load_iso_fixture_map();
     let object = first_object_in_map(&map);
     assert_eq!(iso_object_coords_to_tile(&object, &map), (2, 2));
 }
 
 #[test]
 fn object_grid_indices_align_with_layer_flip() {
-    let map = Loader::new()
-        .load_str(include_str!("fixtures/iso_map.tmx"), &[FIXTURE_DIR])
-        .expect("load iso_map.tmx");
+    let map = load_iso_fixture_map();
     let object = first_object_in_map(&map);
     let (tx, ty) = iso_object_coords_to_tile(&object, &map);
     let map_size = TilemapSize {

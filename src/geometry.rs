@@ -33,7 +33,7 @@ fn bevy_tile_at_world_pos(
 
 /// Extra world `y` for sprites that should sit on the visible tile surface.
 ///
-/// [`bevy_ecs_tilemap`] draws isometric tiles from `center - tile_size / 2`. When `tile_height`
+/// [bevy_ecs_tilemap](https://docs.rs/bevy_ecs_tilemap) draws isometric tiles from `center - tile_size / 2`. When `tile_height`
 /// is larger than the map grid height, art extends above the diamond center. This value is half
 /// of that extra height.
 pub fn tile_drawable_y_offset(tile_height: f32, map_tile_height: u32) -> f32 {
