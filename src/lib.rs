@@ -9,6 +9,30 @@
 //! | **Tile** | Logical grid cells as [`TilePos`] from [`bevy_ecs_tilemap`] |
 //! | **World** | Bevy global positions for gameplay, picking, and sprites |
 //!
+//! ## Isometric maps in the base libraries
+//!
+//! [`bevy_ecs_tiled`](https://docs.rs/bevy_ecs_tiled) and [`bevy_ecs_tilemap`](https://docs.rs/bevy_ecs_tilemap)
+//! load and draw **diamond** isometric maps. [`TilePos::from_world_pos`] and
+//! [`TiledMapAsset::tile_relative_position`](https://docs.rs/bevy_ecs_tiled/latest/bevy_ecs_tiled/tiled/map/asset/struct.TiledMapAsset.html#method.tile_relative_position)
+//! cover much of the tile ↔ world math.
+//!
+//! Real Tiled isometric games still hit gaps that the crates solve piece by piece:
+//!
+//! - **Staggered** isometric orientation is unsupported in `bevy_ecs_tiled` 0.13; use diamond maps or
+//!   another loader.
+//! - **Tiled objects** on diamond maps follow an object **grid** (pixels ÷ `tile_height`). Spawn
+//!   helpers that use raw object pixels alone can miss that grid.
+//! - **Layer indices** in the `.tmx` file use a different Y direction than [`TilePos`]; convert with
+//!   [`tiled_layer_to_bevy_tile`].
+//! - **World picking** must go through each [`TiledTilemap`] [`GlobalTransform`], including layer
+//!   offsets on parent entities.
+//! - **Mixed tile heights** and **layer offsets** interact: shorter tilesets sit higher on the cell,
+//!   so a uniform layer lift may need [`tilemap_height_offset_adjustment`].
+//! - **`y_sort`** depth is applied inside the tilemap renderer; sprites use [`y_sort_z_offset`] to
+//!   match.
+//!
+//! This crate collects those rules and the helpers that apply them.
+//!
 //! ## Isometric object grid
 //!
 //! On diamond isometric maps, Tiled places many objects on an **object grid**. Cell indices come
