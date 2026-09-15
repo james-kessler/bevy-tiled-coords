@@ -2,17 +2,20 @@
 
 use bevy_ecs_tiled::prelude::*;
 
+use crate::geometry::TiledMapGeometry;
+use crate::object_grid::ObjectGridCell;
+
 /// Tile grid index from a TMX object's position on a diamond isometric map.
 ///
 /// Tiled uses the object grid: divide `object.x` and `object.y` by map `tile_height`, then floor.
 ///
 /// On a map with `tile_height` 16, an object at pixel (32, 32) maps to cell (2, 2).
-pub fn iso_object_coords_to_tile(object: &tiled::Object, map: &tiled::Map) -> (i32, i32) {
+pub fn iso_object_coords_to_tile(object: &tiled::Object, map: &tiled::Map) -> ObjectGridCell {
     let th = map.tile_height as f32;
-    (
-        (object.x / th).floor() as i32,
-        (object.y / th).floor() as i32,
-    )
+    ObjectGridCell {
+        x: (object.x / th).floor() as i32,
+        y: (object.y / th).floor() as i32,
+    }
 }
 
 /// Converts a Tiled layer cell index to Bevy [`TilePos`].
@@ -48,14 +51,30 @@ pub fn bevy_tile_pos_from_object_grid(
     map_asset: &TiledMapAsset,
     object: &tiled::Object,
 ) -> Option<TilePos> {
-    let (tx, ty) = match tilemap_type_from_map(&map_asset.map) {
+    object_grid_cell_from_object(map_asset, object)
+        .and_then(|cell| cell.to_tile_pos(&map_asset.tilemap_size))
+}
+
+/// Object grid cell before the Y-flip to [`TilePos`].
+pub fn object_grid_cell_from_object(
+    map_asset: &TiledMapAsset,
+    object: &tiled::Object,
+) -> Option<ObjectGridCell> {
+    let cell = match tilemap_type_from_map(&map_asset.map) {
         TilemapType::Isometric(_) => iso_object_coords_to_tile(object, &map_asset.map),
-        _ => (
-            (object.x / map_asset.map.tile_width as f32).floor() as i32,
-            (object.y / map_asset.map.tile_height as f32).floor() as i32,
-        ),
+        _ => ObjectGridCell {
+            x: (object.x / map_asset.map.tile_width as f32).floor() as i32,
+            y: (object.y / map_asset.map.tile_height as f32).floor() as i32,
+        },
     };
-    tiled_layer_to_bevy_tile(tx, ty, &map_asset.tilemap_size)
+    Some(cell)
+}
+
+impl TiledMapGeometry<'_> {
+    /// [`TilePos`] on this tilemap for a TMX object.
+    pub fn tile_pos_from_object(&self, object: &tiled::Object) -> Option<TilePos> {
+        bevy_tile_pos_from_object_grid(self.map_asset, object)
+    }
 }
 
 #[cfg(test)]

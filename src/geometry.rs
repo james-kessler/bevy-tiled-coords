@@ -1,4 +1,4 @@
-//! [`TilePos`] and world space for one [`TiledTilemap`].
+//! [TilePos](https://docs.rs/bevy_ecs_tilemap/latest/bevy_ecs_tilemap/tiles/struct.TilePos.html) and world space for one [TiledTilemap](https://docs.rs/bevy_ecs_tiled/latest/bevy_ecs_tiled/prelude/struct.TiledTilemap.html).
 
 use bevy::prelude::*;
 use bevy_ecs_tiled::prelude::*;
@@ -6,6 +6,13 @@ use bevy_ecs_tiled::prelude::*;
 /// Which point on a tile a conversion uses.
 ///
 /// Use the same role for `tile_to_world` and `world_to_tile` so positions round-trip.
+///
+/// # Recipes
+///
+/// - [`TileWorldRole::GridCenter`]: pathfinding, tower placement, [`crate::object_grid_anchor_world`].
+/// - [`TileWorldRole::DrawableCenter`]: mouse pick highlights and [`crate::tile_drawable_at_entity`].
+///
+/// See the crate-level **Recipes** section in the library docs for full examples.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum TileWorldRole {
     /// Center of the logical grid cell. Use for pathfinding and entity anchors.
@@ -65,9 +72,25 @@ pub fn world_at_bevy_tile_center(
     tilemap_global.transform_point(local.extend(0.0))
 }
 
-/// Geometry for one loaded map and one [`TiledTilemap`] transform.
+/// Borrowed tilemap components used to build [`TiledMapGeometry`].
+#[derive(Clone, Copy)]
+pub struct TilemapGeomParts<'a> {
+    pub grid_size: &'a TilemapGridSize,
+    pub tile_size: &'a TilemapTileSize,
+    pub map_type: &'a TilemapType,
+    pub tilemap_global: &'a GlobalTransform,
+}
+
+/// Geometry for one loaded map and one [TiledTilemap](https://docs.rs/bevy_ecs_tiled/latest/bevy_ecs_tiled/prelude/struct.TiledTilemap.html) transform.
 ///
 /// Store this on a resource or build it in a system when you know which tilemap layer you use.
+///
+/// # Recipe: picking and anchors
+///
+/// Build one `TiledMapGeometry` per gameplay tilemap (terrain, walk mesh, etc.). Pass its
+/// [`GlobalTransform`](https://docs.rs/bevy/latest/bevy/prelude/struct.GlobalTransform.html) as
+/// `tilemap_global`. Then use [`TiledMapGeometry::world_to_tile`] for cursors and
+/// [`TiledMapGeometry::tile_to_world`] for spawn anchors. See the crate **Recipes** section.
 #[derive(Clone, Copy)]
 pub struct TiledMapGeometry<'a> {
     pub map_asset: &'a TiledMapAsset,
@@ -88,13 +111,31 @@ impl<'a> TiledMapGeometry<'a> {
         map_type: &'a TilemapType,
         tilemap_global: &'a GlobalTransform,
     ) -> Self {
+        Self::from_map_and_tilemap(
+            map_asset,
+            anchor,
+            TilemapGeomParts {
+                grid_size,
+                tile_size,
+                map_type,
+                tilemap_global,
+            },
+        )
+    }
+
+    /// Builds geometry from map metadata and one tilemap's components.
+    pub fn from_map_and_tilemap(
+        map_asset: &'a TiledMapAsset,
+        anchor: &'a TilemapAnchor,
+        parts: TilemapGeomParts<'a>,
+    ) -> Self {
         Self {
             map_asset,
             anchor,
-            grid_size,
-            tile_size,
-            map_type,
-            tilemap_global,
+            grid_size: parts.grid_size,
+            tile_size: parts.tile_size,
+            map_type: parts.map_type,
+            tilemap_global: parts.tilemap_global,
         }
     }
 

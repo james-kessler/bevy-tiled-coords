@@ -1,5 +1,5 @@
 use bevy_ecs_tiled::prelude::*;
-use bevy_tiled_coords::{iso_object_coords_to_tile, tiled_layer_to_bevy_tile};
+use bevy_tiled_coords::{iso_object_coords_to_tile, ObjectGridCell, tiled_layer_to_bevy_tile};
 
 mod common;
 mod support;
@@ -26,18 +26,21 @@ fn tiled_layer_rejects_out_of_bounds() {
 fn iso_object_grid_from_fixture() {
     let map = load_iso_fixture_map();
     let object = first_object_in_map(&map);
-    assert_eq!(iso_object_coords_to_tile(&object, &map), (2, 2));
+    assert_eq!(
+        iso_object_coords_to_tile(&object, &map),
+        ObjectGridCell { x: 2, y: 2 }
+    );
 }
 
 #[test]
 fn object_grid_indices_align_with_layer_flip() {
     let map = load_iso_fixture_map();
     let object = first_object_in_map(&map);
-    let (tx, ty) = iso_object_coords_to_tile(&object, &map);
+    let cell = iso_object_coords_to_tile(&object, &map);
     let map_size = TilemapSize {
         x: map.width,
         y: map.height,
     };
-    let tile = tiled_layer_to_bevy_tile(tx, ty, &map_size).unwrap();
+    let tile = cell.to_tile_pos(&map_size).unwrap();
     assert_eq!(tile, TilePos::new(2, 5));
 }
