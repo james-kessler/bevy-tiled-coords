@@ -40,7 +40,7 @@ mod tile_index;
 mod y_sort;
 
 pub use geometry::{
-    tile_drawable_y_offset, tile_center_in_map_space, world_at_bevy_tile_center, TileWorldRole,
+    tile_center_in_map_space, tile_drawable_y_offset, world_at_bevy_tile_center, TileWorldRole,
     TiledMapGeometry,
 };
 pub use layer::{

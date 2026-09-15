@@ -13,7 +13,10 @@ use tiled::{LayerType, Loader};
 fn main() {
     let fixture_dir = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures");
     let map = Loader::new()
-        .load_str(include_str!("../tests/fixtures/iso_map.tmx"), &[fixture_dir])
+        .load_str(
+            include_str!("../tests/fixtures/iso_map.tmx"),
+            &[fixture_dir],
+        )
         .expect("load iso_map.tmx");
 
     let object = find_object(&map);

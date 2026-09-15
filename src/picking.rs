@@ -30,8 +30,7 @@ pub fn tile_drawable_at_entity(
     map_assets: &Assets<TiledMapAsset>,
 ) -> Option<TileDrawableAtEntity> {
     let (tile_pos, child_of) = tiles.get(tile_entity).ok()?;
-    let (grid_size, tile_size, map_type, tilemap_global) =
-        tilemaps.get(child_of.parent()).ok()?;
+    let (grid_size, tile_size, map_type, tilemap_global) = tilemaps.get(child_of.parent()).ok()?;
     let (tiled_map, anchor) = maps.single().ok()?;
     let map_asset = map_assets.get(&tiled_map.0)?;
     let geometry = TiledMapGeometry::new(

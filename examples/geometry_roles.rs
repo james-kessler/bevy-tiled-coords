@@ -16,10 +16,7 @@ fn main() {
     }))
     .add_plugins(TiledPlugin::default());
 
-    let handle: Handle<TiledMapAsset> = app
-        .world()
-        .resource::<AssetServer>()
-        .load("iso_map.tmx");
+    let handle: Handle<TiledMapAsset> = app.world().resource::<AssetServer>().load("iso_map.tmx");
 
     for _ in 0..120 {
         app.update();

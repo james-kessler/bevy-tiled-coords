@@ -121,10 +121,9 @@ impl<'a> TiledMapGeometry<'a> {
     pub fn world_to_tile(&self, world_xy: Vec2, role: TileWorldRole) -> Option<TilePos> {
         let adjusted = match role {
             TileWorldRole::GridCenter => world_xy,
-            TileWorldRole::DrawableCenter => Vec2::new(
-                world_xy.x,
-                world_xy.y - self.drawable_y_offset(),
-            ),
+            TileWorldRole::DrawableCenter => {
+                Vec2::new(world_xy.x, world_xy.y - self.drawable_y_offset())
+            }
         };
         bevy_tile_at_world_pos(
             adjusted,
