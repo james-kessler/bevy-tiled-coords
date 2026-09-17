@@ -1,0 +1,19 @@
+name: Setup Bevy Linux dependencies
+description: Install native libs for Bevy on Ubuntu with apt package caching.
+
+runs:
+  using: composite
+  steps:
+    - name: Cache apt packages
+      uses: awalsh128/cache-apt-packages@v1
+      with:
+        version: 1.0
+        packages: >
+          libasound2-dev
+          libudev-dev
+          libwayland-dev
+          libxkbcommon-dev
+          libvulkan-dev
+          mesa-vulkan-drivers
+      env:
+        DEBIAN_FRONTEND: noninteractive

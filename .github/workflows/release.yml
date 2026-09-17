@@ -7,6 +7,8 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+  RUST_CACHE_KEY: bevy-0.19-v1
 
 jobs:
   publish:
@@ -14,20 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - name: Install Bevy Linux dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libasound2-dev \
-            libudev-dev \
-            libwayland-dev \
-            libxkbcommon-dev \
-            libvulkan-dev \
-            mesa-vulkan-drivers
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: ${{ env.RUST_CACHE_KEY }}
+          cache-on-failure: true
+      - name: Setup Bevy Linux dependencies
+        uses: ./.github/actions/setup-bevy-linux
       - name: Generate test fixtures
         run: python3 tests/fixtures/generate_tile.py
       - name: Test
-        run: cargo test
+        run: cargo test --all-targets
       - name: Publish to crates.io
-        run: cargo publish --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: cargo publish --token ${{ secrets.CARGO_REGISTRY_TOKEN }} --no-verify
