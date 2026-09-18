@@ -218,21 +218,19 @@ mod picking;
 mod tile_index;
 mod y_sort;
 
-pub use depth::{
-    tile_pick_depth, IsoDepthPlugin, IsoDepthSort, IsoDepthSortSet, YSortDepth,
-};
+pub use depth::{tile_pick_depth, IsoDepthPlugin, IsoDepthSort, IsoDepthSortSet, YSortDepth};
 pub use ecs::{
     geometry_for_gameplay_tilemap, geometry_from_context, refresh_tiled_coords_context,
     tiled_map_geometry_for_entity, GameplayTilemap, ObjectGridAnchored, TileDrawableQueries,
-    TilemapHeightAdjusted, TiledCoordsContext, TiledCoordsPlugin,
+    TiledCoordsContext, TiledCoordsPlugin, TilemapHeightAdjusted,
 };
 pub use geometry::{
     tile_center_in_map_space, tile_drawable_y_offset, world_at_bevy_tile_center, TileWorldRole,
-    TilemapGeomParts, TiledMapGeometry,
+    TiledMapGeometry, TilemapGeomParts,
 };
 pub use layer::{
-    accumulated_tiled_layer_offset, mixed_height_layer_y_adjustment, LayerPixelOffset,
-    tilemap_height_offset_adjustment,
+    accumulated_tiled_layer_offset, mixed_height_layer_y_adjustment,
+    tilemap_height_offset_adjustment, LayerPixelOffset,
 };
 pub use object_grid::ObjectGridCell;
 pub use picking::{

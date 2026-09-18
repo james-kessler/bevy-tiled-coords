@@ -1,5 +1,5 @@
 use bevy_ecs_tiled::prelude::*;
-use bevy_tiled_coords::{iso_object_coords_to_tile, ObjectGridCell, tiled_layer_to_bevy_tile};
+use bevy_tiled_coords::{iso_object_coords_to_tile, tiled_layer_to_bevy_tile, ObjectGridCell};
 
 mod common;
 mod support;

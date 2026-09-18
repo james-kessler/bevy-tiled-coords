@@ -34,7 +34,6 @@ jobs:
         with:
           shared-key: ${{ env.RUST_CACHE_KEY }}
           cache-on-failure: true
-          cache-on-failure: true
       - name: Setup Bevy Linux dependencies
         uses: ./.github/actions/setup-bevy-linux
       - name: Generate test fixtures

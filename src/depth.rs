@@ -105,11 +105,8 @@ fn apply_iso_depth_sort(
     let default_tile_height = map_asset.map.tile_height as f32;
 
     for (mut transform, depth) in &mut sprites {
-        transform.translation.z = depth.z_at_world_y(
-            transform.translation.y,
-            map_size_y,
-            default_tile_height,
-        );
+        transform.translation.z =
+            depth.z_at_world_y(transform.translation.y, map_size_y, default_tile_height);
     }
 }
 
