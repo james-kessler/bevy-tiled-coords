@@ -3,7 +3,7 @@
 use bevy::{ecs::system::SystemParam, prelude::*};
 use bevy_ecs_tiled::prelude::*;
 
-use crate::geometry::{TilemapGeomParts, TiledMapGeometry};
+use crate::geometry::{TiledMapGeometry, TilemapGeomParts};
 use crate::picking::{tile_drawable_at_entity, TileDrawableAtEntity};
 
 /// Marks the [`TiledTilemap`] used for pathfinding, placement, and cursor picks.
