@@ -61,7 +61,7 @@ TilePos  ──TiledMapGeometry──►  world (GridCenter or DrawableCenter)
 [dependencies]
 bevy = "0.19.1"
 bevy_ecs_tiled = "0.13.4"
-bevy_tiled_coords = "0.2.0"
+bevy_tiled_coords = "0.2.1"
 ```
 
 ## Recipes

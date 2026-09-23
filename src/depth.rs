@@ -22,7 +22,10 @@ impl YSortDepth {
 }
 
 /// Bakes isometric y-sort into [`Transform::translation`] z for sprites.
-#[derive(Component, Clone, Copy, Debug)]
+///
+/// Implements [`Default`] so Bevy's blanket [`FromTemplate`] applies. That lets BSN
+/// templates set fields like `IsoDepthSort { layer_z: ... }` (other fields default to `0.0`).
+#[derive(Component, Clone, Copy, Debug, Default)]
 pub struct IsoDepthSort {
     /// Global z of the hovered tilemap layer (or parent layer entity).
     pub layer_z: f32,
