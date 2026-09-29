@@ -67,7 +67,7 @@ fn main() {
     let tile = TilePos::new(3, 4);
     let grid_world = geometry.tile_to_world(tile, TileWorldRole::GridCenter);
     let draw_world = geometry.tile_to_world(tile, TileWorldRole::DrawableCenter);
-    let offset = tile_drawable_y_offset(tile_size.y, asset.tilemap_size.y);
+    let offset = tile_drawable_y_offset(tile_size.y, asset.map.tile_height);
 
     println!("TilePos ({}, {})", tile.x, tile.y);
     println!("Grid center world: {}", grid_world.truncate());

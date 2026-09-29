@@ -140,7 +140,8 @@ impl<'a> TiledMapGeometry<'a> {
     }
 
     fn drawable_y_offset(&self) -> f32 {
-        tile_drawable_y_offset(self.tile_size.y, self.map_asset.tilemap_size.y)
+        // Use map header tile_height (pixels), not tilemap_size.y (tile count).
+        tile_drawable_y_offset(self.tile_size.y, self.map_asset.map.tile_height)
     }
 
     /// Tile index to world position for the chosen [`TileWorldRole`].
